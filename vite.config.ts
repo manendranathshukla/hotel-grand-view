@@ -6,12 +6,13 @@ export default defineConfig(({ mode }) => {
   // Load env file based on `mode` in the current working directory.
   // Set the third parameter to '' to load all env regardless of the `VITE_` prefix.
   const env = loadEnv(mode, (process as any).cwd(), '');
+  
   return {
     plugins: [react()],
     define: {
       // Polyfill process.env.API_KEY so the existing code works without changes.
-      // In Netlify, set the environment variable 'API_KEY' in Site Settings.
-      'process.env.API_KEY': JSON.stringify(env.API_KEY)
+      // Use logical OR to ensure it's at least an empty string if undefined.
+      'process.env.API_KEY': JSON.stringify(env.API_KEY || '')
     }
   }
 })
